@@ -17,19 +17,26 @@ describe("checking PropTypes", () => {
 })
 
 describe("Renders", () => {
-    const props = {
-        buttonText: "Some Text",
-        emitEvent: () => {
-
-        }
-    };
+    let mockFunc;
     let wrapper;
     beforeEach(() => {
+        mockFunc = jest.fn()
+        const props = {
+            buttonText: "Some Text",
+            emitEvent: mockFunc
+        };
         wrapper = shallow(<SharedButton {...props} />)
     })
 
     it("should render a button", () => {
         const button = findByAttr(wrapper, 'buttonComponent');
         expect(button.length).toBe(1);
+    })
+
+    it("should emit a callback Event", () => {
+        const button = findByAttr(wrapper, 'buttonComponent');
+        button.simulate("click")
+        const callback= mockFunc.mock.calls.length;
+        expect(callback).toBe(1)
     })
 })
